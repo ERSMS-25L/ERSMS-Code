@@ -1,0 +1,4 @@
+CREATE DATABASE tasks;
+CREATE DATABASE users;
+CREATE DATABASE donations;
+CREATE DATABASE notifications;

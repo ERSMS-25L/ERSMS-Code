@@ -1,0 +1,65 @@
+version: '3.9'
+
+services:
+  backend:
+    build: ./backend
+    volumes:
+      - ./backend:/app
+    ports:
+      - "8000:8000"
+    command: ["/wait-for-it.sh", "postgres:5432", "--", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8001", "--reload"]
+    environment:
+      - DATABASE_URL=postgresql://postgres:password@postgres:5432/tasks
+    depends_on:
+      - postgres
+    working_dir: /app
+      
+  notification_service:
+    build: ./notification_service
+    volumes:
+      - ./notification_service:/app
+    ports:
+      - "8001:8001"
+    environment:
+      - DATABASE_URL=postgresql://postgres:password@postgres:5432/notifications
+    depends_on:
+      - postgres
+    working_dir: /app
+
+  donation_service:
+    build: ./donation_service
+    volumes:
+      - ./donation_service:/app
+    ports:
+      - "8002:8002"
+    environment:
+      - DATABASE_URL=postgresql://postgres:password@postgres:5432/donations
+    depends_on:
+      - postgres
+    working_dir: /app
+    
+  user_service:
+    build: ./user_service
+    volumes:
+      - ./user_service:/app
+    ports:
+      - "8003:8003"
+    environment:
+      - DATABASE_URL=postgresql://postgres:password@postgres:5432/users
+    depends_on:
+      - postgres
+    working_dir: /app
+    
+  postgres:
+    image: postgres:14
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    
+volumes:
+  postgres_data:
