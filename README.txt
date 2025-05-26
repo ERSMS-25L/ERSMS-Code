@@ -35,7 +35,7 @@ To run the system locally, follow these steps:
 
 - Clone this documentation repo:
 ```bash
-git clone https://github.com/ERSMS-25L/ERSMS-Docs.git
+git clone https://github.com/ERSMS-25L/ERSMS-Code.git
 
 2. Launch the Services
 Make sure you have Docker and Docker Compose installed.
